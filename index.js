@@ -11,9 +11,11 @@ const TOKEN = process.env.TOKEN
 
 const LOAD_SLASH = process.argv[2] == "load"
 
+//Sets client ID and server IDs to allow bot
 const CLIENT_ID = "1029017452820041828"
-const GUILD_ID = ("1029016870327689256", "717036284039790622")
+//const GUILD_ID = ("1029016870327689256, 717036284039790622")
 
+//Gives bot access to intents specified
 const client = new Discord.Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -23,6 +25,7 @@ const client = new Discord.Client({
     ]
 })
 
+//Creation of slash command
 client.slashcommands = new Discord.Collection()
 client.player = new Player(client, {
     ytdlOptions: {
@@ -33,6 +36,7 @@ client.player = new Player(client, {
 
 let commands = []
 
+//Reads folder of slash where all slash commands are held
 const slashFiles = fs.readdirSync("./slash").filter(file => file.endsWith(".js"))
 for (const file of slashFiles){
     const slashcmd = require(`./slash/${file}`)
@@ -41,10 +45,11 @@ for (const file of slashFiles){
     if (LOAD_SLASH) commands.push(slashcmd.data.toJSON())
 }
 
+//Run (node index.js load) when a new command is added to refreshed the bot. Also must be ran when added to a new server
 if (LOAD_SLASH){
     const rest = new REST({version: "9"}).setToken(TOKEN)
     console.log("Deploying slash commands")
-    rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {body: commands})
+    rest.put(Routes.applicationCommands(CLIENT_ID), {body: commands})
     .then(() => {
         console.log("Successfully loaded...")
         process.exit(0)

@@ -2,36 +2,38 @@ const { SlashCommandBuilder } = require("@discordjs/builders")
 const { EmbedBuilder } = require("discord.js")
 const { QueryType } = require("discord-player")
 
+//Adding play slash commands
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("play")
 		.setDescription("loads songs from youtube")
 		.addSubcommand((subcommand) =>
 			subcommand
-				.setName("song")
+				.setName("song-url")
 				.setDescription("Loads a single song from a url")
 				.addStringOption((option) => option.setName("url").setDescription("the song's url").setRequired(true))
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
-				.setName("playlist")
+				.setName("youtube-playlist")
 				.setDescription("Loads a playlist of songs from a url")
 				.addStringOption((option) => option.setName("url").setDescription("the playlist's url").setRequired(true))
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("search")
-				.setDescription("Searches for sogn based on provided keywords")
+				.setDescription("Searches for song based on provided keywords")
 				.addStringOption((option) =>
-					option.setName("searchterms").setDescription("the search keywords").setRequired(true))
+					option.setName("searchterms").setDescription("the search keywords.").setRequired(true))
 		)
         .addSubcommand((subcommand) => 
             subcommand
-                .setName("spotifyplaylist")
+                .setName("spotify-playlist")
                 .setDescription("Searches for a spotify playlist via url")
                 .addStringOption((option) => 
                     option.setName("spotifypl").setDescription("searches for spoify playlist via URL").setRequired(true))
         ),
+    //When running, checks for the activation of slash commands
 	run: async ({ client, interaction }) => {
 		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a VC to use this command")
 
@@ -40,7 +42,7 @@ module.exports = {
 
 		let embed = new EmbedBuilder();
 
-		if (interaction.options.getSubcommand() === "song") {
+		if (interaction.options.getSubcommand() === "song-url") {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
@@ -56,7 +58,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
 
-		} else if (interaction.options.getSubcommand() === "playlist") {
+		} else if (interaction.options.getSubcommand() === "youtube-playlist") {
             let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
@@ -89,7 +91,7 @@ module.exports = {
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
 
-		} else if (interaction.options.getSubcommand() === "spotifyplaylist"){
+		} else if (interaction.options.getSubcommand() === "spotify-playlist"){
             let url = interaction.options.getString("spotifypl")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
@@ -103,7 +105,8 @@ module.exports = {
             const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')
             await queue.addTracks(result.tracks)
             embed
-                .setDescription(`Playlist is now added to queue. Added by: ${interaction.user}`)
+                .setDescription(`Spotify playlist is now added to queue. Added by: ${interaction.user}`)
+
 
         }
 
