@@ -12,8 +12,6 @@ module.exports = {
         // Get song playing
         const song = queue.nowPlaying()
 
-        console.log(song)
-
         // If no song playing
         if(!song) return await interaction.editReply({ content: "No songs are playing rn u idiot", ephemeral: true })
 
