@@ -1,7 +1,9 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
 
+
+//Stop commands which forces the queue to clear and DC the bot
 module.exports = {
-	data: new SlashCommandBuilder().setName("quit").setDescription("Stops the bot and clears the queue"),
+	data: new SlashCommandBuilder().setName("stop").setDescription("Stops the bot and clears the queue"),
 	run: async ({ client, interaction }) => {
 		const queue = client.player.getQueue(interaction.guildId)
 
