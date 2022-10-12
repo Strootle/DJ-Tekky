@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder } = require("@discordjs/builders")
 const { EmbedBuilder } = require("discord.js")
 const { QueryType } = require("discord-player")
 
@@ -10,13 +10,13 @@ module.exports = {
 			subcommand
 				.setName("song")
 				.setDescription("Loads a single song from a url")
-				.addStringOption((option) => option.setName("YT-URL").setDescription("the song's url").setRequired(true))
+				.addStringOption((option) => option.setName("url").setDescription("the song's url").setRequired(true))
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
 				.setName("playlist")
 				.setDescription("Loads a playlist of songs from a url")
-				.addStringOption((option) => option.setName("YT-URL").setDescription("the playlist's url").setRequired(true))
+				.addStringOption((option) => option.setName("url").setDescription("the playlist's url").setRequired(true))
 		)
 		.addSubcommand((subcommand) =>
 			subcommand
@@ -35,7 +35,7 @@ module.exports = {
 		let embed = new EmbedBuilder();
 
 		if (interaction.options.getSubcommand() === "song") {
-            let url = interaction.options.getString("YT-URL")
+            let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.YOUTUBE_VIDEO
@@ -51,7 +51,7 @@ module.exports = {
                 .setFooter({ text: `Duration: ${song.duration}`})
 
 		} else if (interaction.options.getSubcommand() === "playlist") {
-            let url = interaction.options.getString("YT-URL")
+            let url = interaction.options.getString("url")
             const result = await client.player.search(url, {
                 requestedBy: interaction.user,
                 searchEngine: QueryType.YOUTUBE_PLAYLIST
