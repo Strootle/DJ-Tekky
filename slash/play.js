@@ -100,12 +100,10 @@ module.exports = {
                 return interaction.editReply("No results")
             
             const spotifyplaylist = result.spotifyplaylist
-            const fetch = require('isomorphic-unfetch')
-            const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
+            const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')
             await queue.addTracks(result.tracks)
             embed
                 .setDescription(`Playlist is now added to queue. Added by: ${interaction.user}`)
-                .setThumbnail(spotifyplaylist.image)
 
         }
 

@@ -12,7 +12,7 @@ const TOKEN = process.env.TOKEN
 const LOAD_SLASH = process.argv[2] == "load"
 
 const CLIENT_ID = "1029017452820041828"
-const GUILD_ID = "1029016870327689256"
+const GUILD_ID = ("1029016870327689256", "717036284039790622")
 
 const client = new Discord.Client({
     intents: [
