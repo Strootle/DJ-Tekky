@@ -23,9 +23,15 @@ module.exports = {
 				.setName("search")
 				.setDescription("Searches for sogn based on provided keywords")
 				.addStringOption((option) =>
-					option.setName("searchterms").setDescription("the search keywords").setRequired(true)
-				)
-		),
+					option.setName("searchterms").setDescription("the search keywords").setRequired(true))
+		)
+        .addSubcommand((subcommand) => 
+            subcommand
+                .setName("spotifyplaylist")
+                .setDescription("Searches for a spotify playlist via url")
+                .addStringOption((option) => 
+                    option.setName("spotifypl").setDescription("searches for spoify playlist via URL").setRequired(true))
+        ),
 	run: async ({ client, interaction }) => {
 		if (!interaction.member.voice.channel) return interaction.editReply("You need to be in a VC to use this command")
 
@@ -65,6 +71,7 @@ module.exports = {
             embed
                 .setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the Queue`)
                 .setThumbnail(playlist.thumbnail)
+
 		} else if (interaction.options.getSubcommand() === "search") {
             let url = interaction.options.getString("searchterms")
             const result = await client.player.search(url, {
@@ -81,7 +88,27 @@ module.exports = {
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
-		}
+
+		} else if (interaction.options.getSubcommand() === "spotifyplaylist"){
+            let url = interaction.options.getString("spotifypl")
+            const result = await client.player.search(url, {
+                requestedBy: interaction.user,
+                searchEngine: QueryType.SPOTIFY_PLAYLIST
+            })
+
+            if (result.tracks.length === 0)
+                return interaction.editReply("No results")
+            
+            const spotifyplaylist = result.spotifyplaylist
+            const fetch = require('isomorphic-unfetch')
+            const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')(fetch)
+            await queue.addTracks(result.tracks)
+            embed
+                .setDescription(`Playlist is now added to queue. Added by: ${interaction.user}`)
+                .setThumbnail(spotifyplaylist.image)
+
+        }
+
         if (!queue.playing) await queue.play()
         await interaction.editReply({
             embeds: [embed]
