@@ -7,14 +7,14 @@ module.exports = {
         const queue = client.player.getQueue(interaction.guildId)
 
         // Get song playing
-        let song = queue.nowPlaying
+        let song = queue.nowPlaying()
 
         console.log(song)
 
         // If no song playing
         if(!song) return interaction.editReply("No songs rn playing u idiot .")
 
-        return interaction.editReply(`Name: ${song.name}`)
+        return interaction.editReply(`Name: ${song.title}`)
 
     },   
 }
