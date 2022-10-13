@@ -57,6 +57,7 @@ module.exports = {
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
+                .setTimestamp()
 
 		} else if (interaction.options.getSubcommand() === "youtube-playlist") {
             let url = interaction.options.getString("url")
@@ -73,6 +74,8 @@ module.exports = {
             embed
                 .setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the Queue`)
                 .setThumbnail(playlist.thumbnail)
+                .setFooter({text: "DJ Tekky"})
+                .setTimestamp()
 
 		} else if (interaction.options.getSubcommand() === "search") {
             let url = interaction.options.getString("searchterms")
@@ -90,6 +93,7 @@ module.exports = {
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                 .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
+                .setTimestamp()
 
 		} else if (interaction.options.getSubcommand() === "spotify-playlist"){
             let url = interaction.options.getString("spotifypl")
@@ -101,12 +105,23 @@ module.exports = {
             if (result.tracks.length === 0)
                 return interaction.editReply("No results")
             
-            const spotifyplaylist = result.spotifyplaylist
-            const { getData, getPreview, getTracks, getDetails } = require('spotify-url-info')
+            const spotifyplaylist = result.playlist
+            //console.log(result) Gets Playlist Info
+            //console.log(spotifyplaylist.title)
             await queue.addTracks(result.tracks)
             embed
+                //Add author
+                .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+                //Adds title
+                .setTitle(`Playlist: ${spotifyplaylist.title}`)
+                //Adds Description
                 .setDescription(`Spotify playlist is now added to queue. Added by: ${interaction.user}`)
-
+                //Adds field
+                .addFields({name: `Total Songs`, value: `${spotifyplaylist.tracks.length}`, inline: true})
+                .addFields({name: `Author`, value: `${spotifyplaylist.author.name}`, inline: true})
+                .setImage(spotifyplaylist.thumbnail)
+                .setFooter({text: "DJ Tekky"})
+                .setTimestamp()
 
         }
 

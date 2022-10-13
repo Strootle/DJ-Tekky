@@ -1,6 +1,8 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("@discordjs/builders")
 const { IntegrationApplication } = require("discord.js")
 
+
+//When new song is added after one is already playing
 module.exports = {
     data: new SlashCommandBuilder()
     .setName("queue")
@@ -25,18 +27,16 @@ module.exports = {
 
         const currentTrack = queue.current
 
-        await interaction.editReply({
-            embeds: [
-                new EmbedBuilder()
-                    .setDescription("**Currently Playing\n" +
-                    (currentTrack ? `\`[${currentTrack.duration}]\` ${currentTrack.title} -- <@${currentTrack.requestedBy.id}>` : "None") +
-                    `\n\n**Queue**\n${queueString}`
-                    )
-                    .setFooter({
-                        text: `Page ${page + 1} of ${totPages}`
-                    })
-                    .setThumbnail(currentTrack.setThumbnail)
-                ]      
-        })
+        const embed = new EmbedBuilder()
+        embed
+            .setDescription("**Currently Playing**\n" +
+            (currentTrack ? `\`[${currentTrack.duration}]\` ${currentTrack.title} -- <@${currentTrack.requestedBy.id}>` : "None") +
+            `\n\n**Queue**\n${queueString}`
+            )
+            .setFooter({
+                text: `Page ${page + 1} of ${totPages}`
+            })
+            .setThumbnail(currentTrack.thumbnail)
+        await interaction.editReply({ embeds: [embed]})
     }
 }

@@ -1,5 +1,7 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder, EmbedBuilder } = require("@discordjs/builders")
 
+
+//Pauses the current track
 module.exports = {
     data: new SlashCommandBuilder().setName("pause").setDescription("Pauses the music"),
     run: async ({ client, interaction}) => {
@@ -7,7 +9,12 @@ module.exports = {
 
         if (!queue) return await interaction.editReply("There are no songs in the queue")
 
+        const embed = new EmbedBuilder()
+        embed
+            .setDescription("Music has been paused! Use '/resume' to contine the music")
+            .setFooter({text: "DJ Tekky"})
+            .setTimestamp()
         queue.setPaused(true)
-    await interaction.editReply("Music has been paused! Use '/resume' to contine the music")
+    return await interaction.editReply({ embeds: [embed]})
     },  
 }
