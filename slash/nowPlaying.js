@@ -22,7 +22,7 @@ module.exports = {
             .setTitle(`🎵 ${song.title}`)
             .setDescription('Now Playing')
             // Show requester
-            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar.iconURL || 'https://cdn.discordapp.com/embed/avatars/0.png' })
             // Add fields
             .addFields({ name: 'Artist', value: song.author, inline: true })
             .addFields({ name: 'Duration', value: song.duration, inline: true })
