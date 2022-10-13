@@ -15,6 +15,7 @@ module.exports = {
         // If no song playing
         if(!song) return await interaction.editReply({ content: "No songs are playing rn u idiot", ephemeral: true })
 
+        // Identify source
         let source = identifySource(song);
 
         // Build new embed
@@ -24,7 +25,7 @@ module.exports = {
             .setTitle(`🎵 ${song.title}`)
             .setDescription('Now Playing')
             // Show requester
-            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: getAvatar(song.requestedBy) })
             // Add fields
             .addFields({ name: 'Artist', value: song.author, inline: true })
             .addFields({ name: 'Duration', value: song.duration, inline: true })
@@ -41,6 +42,13 @@ module.exports = {
         // Reply with embed
         return await interaction.editReply({ embeds: [embed] })
     },   
+}
+
+// Get avatar for user
+function getAvatar(requester) {
+    if (!requester.avatar) return `https://cdn.discordapp.com/embed/avatars/0.jpeg` // Default
+
+    return `https://cdn.discordapp.com/avatars/${requester.id}/${requester.avatar}.jpeg`
 }
 
 // Format the number of views into something readable
