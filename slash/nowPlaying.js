@@ -15,6 +15,8 @@ module.exports = {
         // If no song playing
         if(!song) return await interaction.editReply({ content: "No songs are playing rn u idiot", ephemeral: true })
 
+        let source = identifySource(song);
+
         // Build new embed
         const embed = new EmbedBuilder()
         embed
@@ -26,12 +28,14 @@ module.exports = {
             // Add fields
             .addFields({ name: 'Artist', value: song.author, inline: true })
             .addFields({ name: 'Duration', value: song.duration, inline: true })
-            .addFields({ name: 'Views', value: `${viewsFormatter(song.views)}`, inline: true })
             // Add thumbnail
             .setImage(song.thumbnail)
             // Show footer
-            .setFooter({ text: `DJ Tekky` })
+            .setFooter({ text: source.name, iconURL: source.logo })
             .setTimestamp()
+
+        if(song.url.includes("youtube.com")) 
+            embed.addFields({ name: 'Views', value: `${viewsFormatter(song.views)}`, inline: true })
 
         // Reply with embed
         return await interaction.editReply({ embeds: [embed] })
@@ -43,4 +47,18 @@ module.exports = {
 function viewsFormatter(views) {
     const formatter = Intl.NumberFormat('en', { notation: 'compact' })
     return formatter.format(views)
+}
+
+function identifySource(song) {
+    if(song.url.includes("youtube.com")) {
+        return {
+            name: "YouTube",
+            logo: "https://www.icsdevon.co.uk/wp-content/uploads/2021/09/YouTube-logo-1536x1536.png"
+        }
+    } else {
+        return {
+            name: "Spotify",
+            logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Spotify_App_Logo.svg/2048px-Spotify_App_Logo.svg.png"
+        }
+    }
 }

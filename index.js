@@ -12,7 +12,7 @@ const TOKEN = process.env.TOKEN
 const LOAD_SLASH = process.argv[2] == "load"
 
 //Sets client ID and server IDs to allow bot
-const CLIENT_ID = "1029017452820041828"
+const CLIENT_ID = process.env.CLIENT_ID
 //const GUILD_ID = ("1029016870327689256, 717036284039790622")
 
 //Gives bot access to intents specified
