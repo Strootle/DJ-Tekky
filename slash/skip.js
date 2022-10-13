@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("@discordjs/builders")
+const { getAvatar } = require("../funcs")
 
 module.exports = {
     data: new SlashCommandBuilder().setName("skip").setDescription("Skips the current song to the next song in queue"),
@@ -10,7 +11,7 @@ module.exports = {
         queue.skip()
         const embed = new EmbedBuilder()
         embed
-            .setAuthor( {name: `Skipped by ${interaction.user.username}`})
+            .setAuthor( {name: `Skipped by ${interaction.user.username}`, iconURL: getAvatar(interaction.user)})
             .setTitle("Skipping song...")
         return await interaction.editReply({ embeds: [embed]})
     },

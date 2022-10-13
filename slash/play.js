@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require("@discordjs/builders")
 const { EmbedBuilder } = require("discord.js")
 const { QueryType } = require("discord-player")
+const { getAvatar } = require("../funcs")
+
 
 //Adding play slash commands
 module.exports = {
@@ -111,7 +113,7 @@ module.exports = {
             await queue.addTracks(result.tracks)
             embed
                 //Add author
-                .setAuthor({ name: `Queued by ${interaction.user.username}`, iconURL: getAvatar(interaction.user) || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+                .setAuthor({ name: `Queued by ${interaction.user.username}`, iconURL: getAvatar(interaction.user)})
                 //Adds title
                 .setTitle(`Playlist: ${spotifyplaylist.title}`)
                 //Adds Description
@@ -130,10 +132,4 @@ module.exports = {
             embeds: [embed]
         })
 	},
-}
-
-function getAvatar(requester) {
-    if (!requester.avatar) return `https://cdn.discordapp.com/embed/avatars/0.jpeg` // Default
-
-    return `https://cdn.discordapp.com/avatars/${requester.id}/${requester.avatar}.jpeg`
 }
