@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("@discordjs/builders")
+const { SlashCommandBuilder, EmbedBuilder } = require("@discordjs/builders")
 
 module.exports = {
     data: new SlashCommandBuilder().setName("skip").setDescription("Skips the current song to the next song in queue"),
@@ -8,6 +8,10 @@ module.exports = {
         if (!queue) return await interaction.editReply("There are no songs currently playing to be skipped. \nGet some tunes on mate.")
 
         queue.skip()
-    await interaction.editReply("Song skipped, best hope that wasn't a good tune.")
+        const embed = new EmbedBuilder()
+        embed
+            .setAuthor( {name: `Skipped by ${interaction.user.username}`})
+            .setTitle("Skipping song...")
+        return await interaction.editReply({ embeds: [embed]})
     },
 }

@@ -111,7 +111,7 @@ module.exports = {
             await queue.addTracks(result.tracks)
             embed
                 //Add author
-                .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+                .setAuthor({ name: `Queued by ${interaction.user.username}`, iconURL: getAvatar(interaction.user) || 'https://cdn.discordapp.com/embed/avatars/0.png' })
                 //Adds title
                 .setTitle(`Playlist: ${spotifyplaylist.title}`)
                 //Adds Description
@@ -130,4 +130,10 @@ module.exports = {
             embeds: [embed]
         })
 	},
+}
+
+function getAvatar(requester) {
+    if (!requester.avatar) return `https://cdn.discordapp.com/embed/avatars/0.jpeg` // Default
+
+    return `https://cdn.discordapp.com/avatars/${requester.id}/${requester.avatar}.jpeg`
 }
