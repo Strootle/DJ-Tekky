@@ -15,6 +15,9 @@ module.exports = {
         // If no song playing
         if(!song) return await interaction.editReply({ content: "No songs are playing rn u idiot", ephemeral: true })
 
+        // Identify source
+        let source = identifySource(song);
+
         // Build new embed
         const embed = new EmbedBuilder()
         embed
@@ -22,20 +25,30 @@ module.exports = {
             .setTitle(`🎵 ${song.title}`)
             .setDescription('Now Playing')
             // Show requester
-            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: song.requestedBy.avatar.iconURL || 'https://cdn.discordapp.com/embed/avatars/0.png' })
+            .setAuthor({ name: `Queued by ${song.requestedBy.username}`, iconURL: getAvatar(song.requestedBy) })
             // Add fields
             .addFields({ name: 'Artist', value: song.author, inline: true })
             .addFields({ name: 'Duration', value: song.duration, inline: true })
-            .addFields({ name: 'Views', value: `${viewsFormatter(song.views)}`, inline: true })
             // Add thumbnail
             .setImage(song.thumbnail)
             // Show footer
-            .setFooter({ text: `DJ Tekky` })
+            .setFooter({ text: source.name, iconURL: source.logo })
             .setTimestamp()
+
+        // If a youtube video show views
+        if(song.url.includes("youtube.com")) 
+            embed.addFields({ name: 'Views', value: `${viewsFormatter(song.views)}`, inline: true })
 
         // Reply with embed
         return await interaction.editReply({ embeds: [embed] })
     },   
+}
+
+// Get avatar for user
+function getAvatar(requester) {
+    if (!requester.avatar) return `https://cdn.discordapp.com/embed/avatars/0.jpeg` // Default
+
+    return `https://cdn.discordapp.com/avatars/${requester.id}/${requester.avatar}.jpeg`
 }
 
 // Format the number of views into something readable
@@ -43,4 +56,20 @@ module.exports = {
 function viewsFormatter(views) {
     const formatter = Intl.NumberFormat('en', { notation: 'compact' })
     return formatter.format(views)
+}
+
+// Identify the source of the song,
+// from the url
+function identifySource(song) {
+    if(song.url.includes("youtube.com")) {
+        return {
+            name: "YouTube",
+            logo: "https://www.icsdevon.co.uk/wp-content/uploads/2021/09/YouTube-logo-1536x1536.png"
+        }
+    } else {
+        return {
+            name: "Spotify",
+            logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Spotify_App_Logo.svg/2048px-Spotify_App_Logo.svg.png"
+        }
+    }
 }
