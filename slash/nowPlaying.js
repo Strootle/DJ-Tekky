@@ -34,6 +34,7 @@ module.exports = {
             .setFooter({ text: source.name, iconURL: source.logo })
             .setTimestamp()
 
+        // If a youtube video show views
         if(song.url.includes("youtube.com")) 
             embed.addFields({ name: 'Views', value: `${viewsFormatter(song.views)}`, inline: true })
 
@@ -49,6 +50,8 @@ function viewsFormatter(views) {
     return formatter.format(views)
 }
 
+// Identify the source of the song,
+// from the url
 function identifySource(song) {
     if(song.url.includes("youtube.com")) {
         return {
