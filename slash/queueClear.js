@@ -16,7 +16,13 @@ module.exports = {
         
         if (!queue) return await interaction.editReply({embeds: [empty]})
         
-        //queue.clearQueue()
+        //Loops to clear the queue
+        while (queue.tracks.length != 0){
+            queue.tracks.pop()
+        }
+        //console.log(queue)
+
+        //Making an embed for clearing the queue
         const embed = new EmbedBuilder()
         embed
             .setAuthor({name: `Executed By ${interaction.user.username}`, iconURL: getAvatar(interaction.user)})

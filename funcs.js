@@ -1,11 +1,4 @@
 module.exports = {
-    clearQueue: (queue) => {
-        if (this.destroyed)
-        throw new DMPError(DMPErrors.QUEUE_DESTROYED);
-
-        let currentlyPlaying = this.songs.shift();
-        this.songs = currentlyPlaying;
-    },
     // Get avatar for user
     getAvatar: (requester) => {
         if (!requester.avatar) return `https://cdn.discordapp.com/embed/avatars/0.jpeg` // Default
