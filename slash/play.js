@@ -75,7 +75,7 @@ module.exports = {
             await queue.addTracks(result.tracks)
             embed
                 .setDescription(`**${result.tracks.length} songs from [${playlist.title}](${playlist.url})** have been added to the Queue`)
-                .setThumbnail(playlist.thumbnail)
+                .setImage(playlist.thumbnail)
                 .setFooter({text: "DJ Tekky"})
                 .setTimestamp()
 
@@ -94,7 +94,6 @@ module.exports = {
             console.log(queue)
             embed
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
-                .setThumbnail(song.thumbnail)
                 .setFooter({ text: `Duration: ${song.duration}`})
                 .setTimestamp()
 
