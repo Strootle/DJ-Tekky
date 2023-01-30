@@ -90,6 +90,7 @@ module.exports = {
             
             const song = result.tracks[0]
             await queue.addTrack(song)
+            console.log(queue)
             embed
                 .setDescription(`**[${song.title}](${song.url})** has been added to the Queue`)
                 .setThumbnail(song.thumbnail)
